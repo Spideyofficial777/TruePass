@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Security Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h4>Session Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="info-item">
+                        <span class="info-label">Started At:</span>
+                        <span class="info-value">{{ session_start|datetimeformat }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Last Activity:</span>
+                        <span class="info-value">{{ last_activity|datetimeformat }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">IP Address:</span>
+                        <span class="info-value">{{ ip_address }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Session ID:</span>
+                        <span class="info-value">{{ session.session_token[:8] }}...{{ session.session_token[-4:] }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h4>Security Status</h4>
+                </div>
+                <div class="card-body">
+                    <div class="security-status">
+                        <div class="status-item status-good">
+                            <span class="status-icon">✓</span>
+                            <span class="status-text">Encryption Active</span>
+                        </div>
+                        <div class="status-item status-good">
+                            <span class="status-icon">✓</span>
+                            <span class="status-text">Two-Factor Verified</span>
+                        </div>
+                        <div class="status-item status-good">
+                            <span class="status-icon">✓</span>
+                            <span class="status-text">Secure Connection</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-icon">!</span>
+                            <span class="status-text">Session Timeout in 15:32</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h4>Quick Actions</h4>
+                </div>
+                <div class="card-body">
+                    <div class="actions-list">
+                        <a href="{{ url_for('secure_chat') }}" class="action-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            </svg>
+                            Go to Secure Chat
+                        </a>
+                        <a href="#" class="action-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                            </svg>
+                            Change Master Password
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="action-item text-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+                                <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                            </svg>
+                            Terminate All Sessions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
