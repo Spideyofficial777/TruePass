@@ -1,11 +1,131 @@
 <!DOCTYPE html>
-<html>
-<head><title>Login</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🔐 Secure Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #0d1117;
+      color: #c9d1d9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .login-box {
+      background: #161b22;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #58a6ff;
+      max-width: 400px;
+      width: 100%;
+    }
+    .form-control, .btn {
+      border-radius: 8px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #238636, #2ea043);
+      border: none;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #2ea043, #238636);
+    }
+    .error-msg {
+      color: #f85149;
+      font-size: 0.9em;
+      margin-top: 0.25rem;
+    }
+    .glow-title {
+      font-size: 1.8rem;
+      text-align: center;
+      color: #58a6ff;
+      text-shadow: 0 0 10px #58a6ff;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
 <body>
-  <h2>🔐 Enter Master Password</h2>
-  <form method="post">
-    <input type="password" name="password" placeholder="Master Password" required>
-    <button type="submit">Login</button>
+
+<div class="login-box">
+  <div class="glow-title">🔒 Trust Login</div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+      {{ form.email.label(class="form-label") }}
+      {{ form.email(class="form-control", placeholder="Enter your email") }}
+      <div id="email-error" class="error-msg"></div>
+    </div>
+
+    <div class="mb-3">
+      {{ form.password.label(class="form-label") }}
+      {{ form.password(class="form-control", placeholder="Enter master password") }}
+      <div id="password-error" class="error-msg"></div>
+    </div>
+
+    <div class="d-grid">
+      {{ form.submit(class="btn btn-primary") }}
+    </div>
   </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const emailInput = document.querySelector('input[name="email"]');
+    const passInput = document.querySelector('input[name="password"]');
+    const submitBtn = document.querySelector('button[type="submit"]');
+    const emailError = document.getElementById("email-error");
+    const passError = document.getElementById("password-error");
+
+    function validateEmail(email) {
+      const re = /^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$/;
+      return re.test(email);
+    }
+
+    function validatePassword(pass) {
+      return pass.length >= 6;
+    }
+
+    function checkForm() {
+      let valid = true;
+
+      if (!validateEmail(emailInput.value)) {
+        emailError.textContent = "❌ Enter a valid email address";
+        valid = false;
+      } else {
+        emailError.textContent = "";
+      }
+
+      if (!validatePassword(passInput.value)) {
+        passError.textContent = "❌ Password must be at least 6 characters";
+        valid = false;
+      } else {
+        passError.textContent = "";
+      }
+
+      submitBtn.disabled = !valid;
+    }
+
+    emailInput.addEventListener('input', checkForm);
+    passInput.addEventListener('input', checkForm);
+    checkForm();
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
