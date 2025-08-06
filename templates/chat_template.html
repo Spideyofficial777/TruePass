@@ -1,0 +1,86 @@
+chat_template = """
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Secure Chat 💬</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #0f2027;
+      background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .chat-box {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 1rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 600px;
+    }
+    .chat-history {
+      max-height: 250px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      background: #1a1a2e;
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .chat-history div {
+      background: #f1f1f1;
+      color: #111;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.5rem;
+    }
+    .form-control {
+      background-color: #1a1a2e;
+      color: white;
+      border: 1px solid #444;
+    }
+    .form-control:focus {
+      background-color: #222244;
+      color: white;
+    }
+    .btn {
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      border: none;
+      width: 100%;
+      padding: 0.6rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .flash-message {
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-box">
+    <h2 class="text-center">💬 Secure Chat</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash-message alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    <div class="chat-history">
+      {{ chat_html|safe }}
+    </div>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      {{ form.message(class_="form-control", placeholder="Type your message...") }}
+      {{ form.submit(class_="btn btn-danger") }}
+    </form>
+  </div>
+</body>
+</html>
+"""
