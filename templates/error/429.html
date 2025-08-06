@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Too Many Requests{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-card">
+        <div class="error-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                <path d="M10 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+        </div>
+        <h2>429 - Too Many Requests</h2>
+        <p>You've exceeded the allowed request rate. Please try again later.</p>
+        <div class="countdown">
+            <p>Retry available in: <span id="retry-countdown">60</span> seconds</p>
+        </div>
+        <a href="{{ url_for('secure_gate') }}" class="btn btn-gate-primary mt-3">Return to Login</a>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let seconds = 60;
+    const countdownElement = document.getElementById('retry-countdown');
+    
+    const timer = setInterval(() => {
+        seconds--;
+        countdownElement.textContent = seconds;
+        
+        if (seconds <= 0) {
+            clearInterval(timer);
+        }
+    }, 1000);
+});
+</script>
+{% endblock %}
+{% endblock %}
