@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Secure Chat{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .chat-header {
+        background: rgba(0,0,0,0.2);
+        padding: 15px;
+        border-radius: 8px 8px 0 0;
+    }
+    .chat-messages {
+        height: 400px;
+        overflow-y: auto;
+        background: rgba(0,0,0,0.1);
+        padding: 15px;
+    }
+    .message {
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.1);
+        position: relative;
+    }
+    .message-time {
+        font-size: 0.8em;
+        color: rgba(255,255,255,0.6);
+    }
+    .message-security-level {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 0.7em;
+        padding: 2px 5px;
+        border-radius: 3px;
+    }
+    .security-level-1 {
+        background: #28a745;
+    }
+    .security-level-2 {
+        background: #17a2b8;
+    }
+    .security-level-3 {
+        background: #dc3545;
+    }
+    .chat-input {
+        background: rgba(0,0,0,0.2);
+        padding: 15px;
+        border-radius: 0 0 8px 8px;
+    }
+    .security-indicator {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .encryption-icon {
+        margin-right: 10px;
+        color: #28a745;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <h3>Secure Chat Channel</h3>
+        <div class="connection-info">
+            <span class="badge bg-success">ENCRYPTED</span>
+            <small class="text-muted">Session ID: {{ session.session_token[:8] }}...{{ session.session_token[-4:] }}</small>
+        </div>
+    </div>
+    
+    <div class="chat-messages">
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="message">
+                <div class="message-security-level security-level-{{ msg.security_level }}">
+                    Level {{ msg.security_level }} Security
+                </div>
+                <div class="message-text">{{ msg.message }}</div>
+                <div class="message-time">
+                    {{ msg.timestamp|datetimeformat }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center text-muted">
+                No messages yet. Start a secure conversation.
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="chat-input">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.message.label(class="form-label") }}
+                {{ form.message(class="form-control") }}
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form.security_level.label(class="form-label") }}
+                        {{ form.security_level(class="form-control") }}
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                    {{ form.submit(class="btn btn-gate-info w-100") }}
+                </div>
+            </div>
+            
+            <div class="security-indicator">
+                <div class="encryption-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <small>All messages are end-to-end encrypted</small>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
